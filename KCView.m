@@ -8,6 +8,13 @@
 
 #import "KCView.h"
 
+#define CIRCLEBORDERWIDTH 2
+
+#define DEFAULTSCIRCLESTART M_PI * 1.5
+#define DEFAULTSCIRCLEEND   M_PI * 3.5
+#define CIRCLEPERIMETER     M_PI * 2
+
+
 @interface KCView()
 
 @property(nonatomic,strong)UIView * contentView;
@@ -93,7 +100,6 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"%.1f",scoreValue];
     [self setNeedsDisplay];
     
-    
 }
 
 -(void)drawRect:(CGRect)rect
@@ -109,23 +115,23 @@
     //当前得分比例 跟 总分 
     float result = 1 - percent;
     //计算当前得出比例需要从哪个位置开始
-    float start = M_PI * 1.5 + 2 * M_PI * result / 2;
+    float start = DEFAULTSCIRCLESTART + CIRCLEPERIMETER * result / 2;
     //计算当前得出比例需要从哪个位置结束
-    float end = M_PI * 3.5 - 2 * M_PI * result / 2;
+    float end = DEFAULTSCIRCLEEND - CIRCLEPERIMETER * result / 2;
     //计算self的中心点。
     CGPoint center = CGPointMake(rect.size.width/2, rect.size.height/2);
+    //计算半径。
     
-    //半径。
-    float r = (rect.size.width - 4) / 2;
+    float r = (rect.size.width - CIRCLEBORDERWIDTH * 2) / 2;
     UIBezierPath *path1 = [UIBezierPath bezierPath];
-    [path1 addArcWithCenter:center radius:r startAngle:M_PI * 1.5 endAngle: M_PI * 3.5 clockwise:YES];
-    [path1 setLineWidth:2];
+    [path1 addArcWithCenter:center radius:r startAngle:DEFAULTSCIRCLESTART endAngle: DEFAULTSCIRCLEEND clockwise:YES];
+    [path1 setLineWidth:CIRCLEBORDERWIDTH];
     [[UIColor lightGrayColor]setStroke];
     [path1 stroke];
     
     UIBezierPath *path2 = [UIBezierPath bezierPath];
     [path2 addArcWithCenter:center radius:r startAngle:start endAngle:end clockwise:YES];
-    [path2 setLineWidth:2];
+    [path2 setLineWidth:CIRCLEBORDERWIDTH];
     [[UIColor yellowColor]setStroke];
     [path2 stroke];
 
